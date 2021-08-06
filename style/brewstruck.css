@@ -1,0 +1,27 @@
+@import 'classless.css';
+
+@font-face {
+  font-family: MagicCards;
+  src: url(../font/MagicCardsNormal.ttf);
+}
+
+:root, html[data-theme='brewstruck'] {
+	--rem: 12pt;
+	--width: 48rem;
+	--navpos: absolute;  /* fixed | absolute */
+	--font-p: 1rem/1.777 'Open Sans', Helvetica, sans-serif;
+	--font-h: .9rem/1.333 'Open Sans', Helvetica, sans-serif;
+	--font-c: .9em/1.333 monospace;
+	--border: 1px solid var(--cmed);
+	--ornament: "}|[{]";
+	/* foreground   | background color */
+	--cfg:   #f9f9f7;    --cbg:    #34322F;
+	--cdark: #a17449;    --clight: #e7dcd1;
+	--cmed:  #9f9e93;
+	--clink: #efe062;
+	--cemph: #F3E88A;
+}
+
+section:after {
+  font-family: MagicCards;
+}

@@ -26,6 +26,13 @@ body {
   padding: 2.37rem 0.75rem 0;
 }
 
+footer {
+  color: var(--cdark);
+  font-size: 0.75rem;
+  font-style: italic;
+  text-align: center;
+}
+
 h1, h2, h3, h4, h5 {
   margin: 1.33rem 0 0.25rem;
 }

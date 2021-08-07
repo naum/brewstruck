@@ -8,30 +8,26 @@ console.log('====')
 
 function handleSFCard (card) {
   if (card.legalities.standard === 'legal' || card.legalities.historic === 'legal') {
-    //console.log(`${card.name} is a LEGAL mtga card`) 
+    console.log(`${card.name} is a LEGAL mtga card`) 
+    let arturi, o
     if ('card_faces' in card) {
-      card.card_faces.forEach((face, i) => {
-        const arturi = ('image_uris' in face) 
-          ? face.image_uris.large
-          : card.image_uris.large
-        mtgaCardDict[face.name] = {
-          arturi: arturi,
-          mv: card.cmc,
-          t: face.type_line,
-          o: face.oracle_text,
-          c: face.colors,
-          s: card.set
-        }
-      })
+      arturi = ('image_uris' in card.card_faces[0])
+        ? card.card_faces[0].image_uris.large
+        : card.image_uris.large
+      o = ('oracle_text' in card.card_faces[0])
+        ? card.card_faces[0].oracle_text
+        : card.oracle_text
     } else {
-      mtgaCardDict[card.name] = {
-        arturi: card.image_uris.large,
-        mv: card.cmc,
-        t: card.type_line,
-        o: card.oracle_text,
-        c: card.colors,
-        s: card.set
-      }
+      arturi = card.image_uris.large
+      o = card.oracle_text
+    }
+    mtgaCardDict[card.name] = {
+      arturi: arturi,
+      mv: card.cmc,
+      t: card.type_line,
+      o: o,
+      c: card.color_identity,
+      s: card.set
     }
   } 
 }

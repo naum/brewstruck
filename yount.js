@@ -78,14 +78,15 @@ async function handleCard (cardName) {
       console.log(`Missing **mv** for ${c.name}!`)
     }
     if (c.name in ACARDS && STANDARD_SETS.includes(ACARDS[c.name].s)) {
+    // if (c.name in ACARDS) {
       console.log(`${c.synergy}, ${c.name}, ${ACARDS[c.name].mv}, ${ACARDS[c.name].c.join('')}`)
     }
   })
   console.log('----')
-  await page.setViewport({ width: 1000, height: 1375 })
-  const imageFn = generateImageFilename(TARGET_URL) + '.png'
-  console.log(`imageFn: ${imageFn}`)
-  await page.screenshot({path: imageFn})
+  // await page.setViewport({ width: 1000, height: 1375 })
+  // const imageFn = generateImageFilename(TARGET_URL) + '.png'
+  // console.log(`imageFn: ${imageFn}`)
+  // await page.screenshot({path: imageFn})
   await browser.close()
 }
 

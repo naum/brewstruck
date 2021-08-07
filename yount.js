@@ -12,10 +12,6 @@ const cheerio = require('cheerio')
 const puppeteer = require('puppeteer')
 
 const EDHREC_URL = 'https://edhrec.com/cards/'
-const SP = ' '
-const TARGET_CARD = process.argv[2]
-const TARGET_URL = `${EDHREC_URL}${formatCardQS(TARGET_CARD)}`
-console.log(`TARGET_URL: ${TARGET_URL}`)
 
 function byMV (a, b) {
   const a_mv = ACARDS[a.name].mv ?? 0
@@ -32,9 +28,12 @@ function bySynergyScore (a, b) {
 }
 
 function formatCardQS (cardname) {
-  cardname = cardname.replace(/,/g, '')
-  cardname = cardname.replace(/\'/g, '')
-  return cardname.replace(/\s/g, '-').toLowerCase()
+  if (cardname) {
+    cardname = cardname.replace(/,/g, '')
+    cardname = cardname.replace(/\'/g, '')
+    cardname = cardname.replace(/\s\/\/.*$/, '')
+    return cardname.replace(/\s/g, '-').toLowerCase()
+  }
 }
 
 function generateImageFilename (u) {
@@ -49,7 +48,9 @@ function generateImageFilename (u) {
 async function handleCard (cardName) {
   const browser = await puppeteer.launch()
   const page = await browser.newPage()
-  await page.goto(TARGET_URL, {waitUntil: 'networkidle0', timeout: 240000})
+  const targetUrl = `${EDHREC_URL}${formatCardQS(cardName)}`
+  console.log(`targetUrl: ${targetUrl}`)
+  await page.goto(targetUrl, {waitUntil: 'networkidle0', timeout: 240000})
   const data = await page.evaluate(() => document.querySelector('*').outerHTML)
   const $ = cheerio.load(data)
   let synCards = []
@@ -63,11 +64,18 @@ async function handleCard (cardName) {
     }
     const synScore = pluckSynergyVal(synPercent)
     if (cardName in ACARDS) {
-      synCards.push({ name: cardName, synergy: synScore })
+      synCards.push({ 
+        name: cardName, 
+        synergy: synScore,
+        mv: ACARDS[cardName].mv,
+        c: ACARDS[cardName].c.join(''),
+        o: ACARDS[cardName].o,
+        arturi: ACARDS[cardName].arturi
+      })
     }
   })
   console.log("====")
-  console.log(`${TARGET_CARD.toUpperCase()}`)
+  console.log(`${cardName.toUpperCase()}`)
   console.log('----')
   console.log(`Total cards: ${synCards.length}`)
   console.log('----')
@@ -77,17 +85,18 @@ async function handleCard (cardName) {
     if (! 'mv' in ACARDS[c.name]) {
       console.log(`Missing **mv** for ${c.name}!`)
     }
-    if (c.name in ACARDS && STANDARD_SETS.includes(ACARDS[c.name].s)) {
-    // if (c.name in ACARDS) {
+    //if (c.name in ACARDS && STANDARD_SETS.includes(ACARDS[c.name].s)) {
+    if (c.name in ACARDS) {
       console.log(`${c.synergy}, ${c.name}, ${ACARDS[c.name].mv}, ${ACARDS[c.name].c.join('')}`)
     }
   })
   console.log('----')
-  // await page.setViewport({ width: 1000, height: 1375 })
-  // const imageFn = generateImageFilename(TARGET_URL) + '.png'
-  // console.log(`imageFn: ${imageFn}`)
-  // await page.screenshot({path: imageFn})
   await browser.close()
+  return synCards
+}
+
+function mtgaCardList () {
+  return Object.keys(ACARDS).sort()
 }
 
 function pluckSynergyVal (synPercentStr) {
@@ -96,4 +105,4 @@ function pluckSynergyVal (synPercentStr) {
   return (Number.isInteger(synScore)) ? synScore : -999
 }
 
-handleCard(TARGET_CARD)
+module.exports = { handleCard, mtgaCardList }

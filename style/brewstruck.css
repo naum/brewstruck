@@ -13,7 +13,7 @@
 	--font-h: .9rem/1.333 'Open Sans', Helvetica, sans-serif;
 	--font-c: .9em/1.333 monospace;
 	--border: 1px solid var(--cmed);
-	--ornament: "} | [ { ]";
+	--ornament: "} \3000 | \3000 [ \3000 { \3000 ]";
 	/* foreground   | background color */
 	--cfg:   #f9f9f7;    --cbg:    #34322F;
 	--cdark: #a17449;    --clight: #e7dcd1;
@@ -26,6 +26,15 @@ body {
   padding: 2.37rem 0.75rem 0;
 }
 
+button {
+	color: var(--cbg);
+	font-weight: 800;
+}
+
+button:active, button:hover {
+	background: var(--cdard);
+}
+
 footer {
   color: var(--cdark);
   font-size: 0.75rem;
@@ -34,15 +43,51 @@ footer {
 }
 
 h1, h2, h3, h4, h5 {
-  margin: 1.33rem 0 0.25rem;
+  margin: 1.33rem 0 0.75rem;
+}
+
+h1, h2 {
+	color: var(--cmed);
+  font-weight: 500;
+  text-align: center;
+	text-shadow: 
+		1px 1px 1px var(--cdark),
+		1px 1px 1px var(--cdark),
+		1px 3px 3px var(--clight);
 }
 
 h1 {
-  font-size: 2.37rem;
-  font-weight: 500;
-  text-align: center;
+	font-size: 2.37rem;
+}
+
+h2 {
+	font-size: 1.77rem;
 }
 
 section:after {
+	display: none;
   font-family: MagicCards;
+	font-size: 1.333rem;
+}
+
+table {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#cardselect {
+	align-items: flex-start;
+	clear: both;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+}
+
+#cardselect button {
+	flex-grow: 1;
+	margin-top: 0.0625rem;
+}
+
+#cardselect input {
+	flex-grow: 3;
 }

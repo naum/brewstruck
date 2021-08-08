@@ -58,6 +58,7 @@ h1, h2 {
 
 h1 {
 	font-size: 2.37rem;
+	text-transform: uppercase;
 }
 
 h2 {
@@ -75,6 +76,14 @@ table {
 	margin-right: auto;
 }
 
+th {
+	text-transform: uppercase;
+}
+
+tr:hover {
+	color: var(--cdark);
+}
+
 #cardselect {
 	align-items: flex-start;
 	clear: both;
@@ -90,4 +99,19 @@ table {
 
 #cardselect input {
 	flex-grow: 3;
+}
+
+#hocard {
+	left: -3rem;
+	position: fixed;
+	top: 1;
+	z-index: 100;
+}
+
+#hocard img {
+	max-width: 12rem;
+}
+
+.cardcell {
+	cursor: pointer;
 }

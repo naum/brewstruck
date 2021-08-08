@@ -27,6 +27,7 @@ function generateDeckCandidateDisplay (cardname) {
     let gdelem = document.getElementById('generated-deck')
     const sectTitle = '<h2>deck candidates</h2>'
     gdelem.innerHTML = sectTitle + generateDeckCandidateTable(cardlist)
+    setupCardCellLinks(cardlist)
   })
 }
 
@@ -43,7 +44,7 @@ function generateDeckCandidateTable (cardlist) {
       `<td class="text-right">${c.mv}</td>` +
       `<td class="text-right">${c.synergy}</td>` +
       `<td class="text-left">${c.c}</td>` +
-      `<td class="text-left">${c.name}</td>`
+      `<td class="cardcell text-left">${c.name}</td>`
     tbout += `<tr>${tdout}</tr>`
   })
   return `<table id="dc-chart">${tbout}</table>`
@@ -61,6 +62,16 @@ function setupBrewButtonTrigger () {
     document.querySelector('#generated-deck').innerHTML = '<p>Processing&hellip;'
     const targetCard = document.querySelector('#cardchoice').value
     generateDeckCandidateDisplay(targetCard)
+  })
+}
+
+function setupCardCellLinks (cardlist) {
+  document.querySelectorAll('.cardcell').forEach((cc) => {
+    cc.addEventListener('click', (e) => {
+      const cardho = e.target.firstChild.textContent
+      const cqs = encodeURIComponent(cardho)
+      window.open(`https://scryfall.com/search/?q=${cqs}`, '_blank')
+    })
   })
 }
 

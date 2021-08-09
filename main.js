@@ -1,6 +1,19 @@
 const yount = require('./yount.js')
 
 const BRNL = '<br>\n'
+const MTG_COL_W = '}'
+const MTG_COL_U = '|'
+const MTG_COL_B = '['
+const MTG_COL_R = '{'
+const MTG_COL_G = ']'
+const MTG_COL_LITS = [
+  MTG_COL_W, MTG_COL_U, MTG_COL_B, MTG_COL_R, MTG_COL_G
+]
+const WO_FEATURES = 'left=80,top=80'
+
+let cardFetchElapsedHS = 0
+let cardFetchIntervalID = null
+let sfWin = null
 
 nw.Screen.Init()
 
@@ -10,6 +23,32 @@ win.maximize()
 
 const activeScreen = nw.Screen.screens[0]
 console.dir(activeScreen)
+
+function disableCpuBusyIndicator() {
+  let cpubusyElem = document.getElementById('cpu-busy')
+  cpubusyElem.style.display = 'none'
+  clearInterval(cardFetchIntervalID)
+}
+
+function displayCpuBusyIndicator() {
+  console.log(`cardFetchElapsedHS: ${cardFetchElapsedHS}`)
+  const cpuWorkingLit = MTG_COL_LITS.map((cc, i) => {
+    return ((cardFetchElapsedHS % MTG_COL_LITS.length) === i)
+      ? `<span class="litcolor">${cc}</span>`
+      : cc
+  })
+  let cpubusyElem = document.getElementById('cpu-busy')
+  cpubusyElem.style.display = 'block'
+  cpubusyElem.innerHTML = cpuWorkingLit.join(' \u3000 ')
+}
+
+function enableCpuBusyIndicator() {
+  cardFetchElapsedHS = 0
+  cardFetchIntervalID = setInterval(() => {
+    displayCpuBusyIndicator()
+    cardFetchElapsedHS += 1
+  }, 500)
+}
 
 function fillMtgaCardDatalist () {
   let clelem = document.getElementById('mtgacards')
@@ -24,6 +63,7 @@ function fillMtgaCardDatalist () {
 function generateDeckCandidateDisplay (cardname) {
   yount.handleCard(cardname).then((cardlist) => {
     console.log(`cardlist: ${cardlist}`)
+    disableCpuBusyIndicator()
     let gdelem = document.getElementById('generated-deck')
     const sectTitle = '<h2>deck candidates</h2>'
     gdelem.innerHTML = sectTitle + generateDeckCandidateTable(cardlist)
@@ -59,7 +99,7 @@ function genesis () {
 function setupBrewButtonTrigger () {
   const belem = document.getElementById('gobrew')
   gobrew.addEventListener('click', () => {
-    document.querySelector('#generated-deck').innerHTML = '<p>Processing&hellip;'
+    enableCpuBusyIndicator()
     const targetCard = document.querySelector('#cardchoice').value
     generateDeckCandidateDisplay(targetCard)
   })
@@ -70,7 +110,11 @@ function setupCardCellLinks (cardlist) {
     cc.addEventListener('click', (e) => {
       const cardho = e.target.firstChild.textContent
       const cqs = encodeURIComponent(cardho)
-      window.open(`https://scryfall.com/search/?q=${cqs}`, '_blank')
+      sfWin = window.open(
+        `https://scryfall.com/search/?q=${cqs}`, 
+        '_blank', 
+        WO_FEATURES
+      )
     })
   })
 }

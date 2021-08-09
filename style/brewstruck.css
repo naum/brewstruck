@@ -6,7 +6,7 @@
 }
 
 :root, html[data-theme='brewstruck'] {
-	--rem: 12pt;
+	--rem: 16px;
 	--width: 48rem;
 	--navpos: absolute;  /* fixed | absolute */
 	--font-p: 1rem/1.777 'Open Sans', Helvetica, sans-serif;
@@ -101,6 +101,13 @@ tr:hover {
 	flex-grow: 3;
 }
 
+#cpu-busy {
+	display: none;
+	font-family: MagicCards;
+	font-size: 1.777rem;
+	text-align: center;
+}
+
 #hocard {
 	left: -3rem;
 	position: fixed;
@@ -114,4 +121,8 @@ tr:hover {
 
 .cardcell {
 	cursor: pointer;
+}
+
+.litcolor {
+	color: var(--cemph);
 }

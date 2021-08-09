@@ -16,6 +16,10 @@ a mtga (MTG Arena) deck generator
 
 `npm run dev`
 
+## package for distribution
+
+*instructions TBD*
+
 ## todo
 
 - progress indicator on card search

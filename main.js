@@ -1,6 +1,6 @@
 const yount = require('./yount.js')
 
-const BRNL = '<br>\n'
+const ES = ''
 const MTG_COL_W = '}'
 const MTG_COL_U = '|'
 const MTG_COL_B = '['
@@ -13,6 +13,7 @@ const WO_FEATURES = 'left=80,top=80'
 
 let cardFetchElapsedHS = 0
 let cardFetchIntervalID = null
+let chosenFormat = 'historic'
 let sfWin = null
 
 nw.Screen.Init()
@@ -23,6 +24,21 @@ win.maximize()
 
 const activeScreen = nw.Screen.screens[0]
 console.dir(activeScreen)
+
+function clearGeneratedDeckDisplay () {
+  let gdelem = document.getElementById('generated-deck')
+  gdelem.innerHTML = ES
+}
+
+function determineChosenFormat () {
+  const cfelems = document.getElementsByName('chosenformat')
+  if (cfelems[0].checked) {
+    chosenFormat = 'historic'
+  } else {
+    chosenFormat = 'standard'
+  }
+  console.log(`chosenFormat: ${chosenFormat}`)
+}
 
 function disableCpuBusyIndicator() {
   let cpubusyElem = document.getElementById('cpu-busy')
@@ -61,7 +77,7 @@ function fillMtgaCardDatalist () {
 }
 
 function generateDeckCandidateDisplay (cardname) {
-  yount.handleCard(cardname).then((cardlist) => {
+  yount.handleCard(cardname, chosenFormat).then((cardlist) => {
     console.log(`cardlist: ${cardlist}`)
     disableCpuBusyIndicator()
     let gdelem = document.getElementById('generated-deck')
@@ -99,6 +115,8 @@ function genesis () {
 function setupBrewButtonTrigger () {
   const belem = document.getElementById('gobrew')
   gobrew.addEventListener('click', () => {
+    determineChosenFormat()
+    clearGeneratedDeckDisplay()
     enableCpuBusyIndicator()
     const targetCard = document.querySelector('#cardchoice').value
     generateDeckCandidateDisplay(targetCard)

@@ -64,30 +64,23 @@ async function handleCard (cardName, format='historic') {
     }
     const synScore = pluckSynergyVal(synPercent)
     if (cardName in ACARDS) {
-      synCards.push({ 
-        name: cardName, 
-        synergy: synScore,
-        mv: ACARDS[cardName].mv,
-        c: ACARDS[cardName].c.join(''),
-        o: ACARDS[cardName].o,
-        arturi: ACARDS[cardName].arturi
-      })
+      if (format === 'historic' || STANDARD_SETS.includes(ACARDS[cardName].s)) {
+        synCards.push({ 
+          name: cardName, 
+          synergy: synScore,
+          mv: ACARDS[cardName].mv,
+          c: ACARDS[cardName].c.join(''),
+          o: ACARDS[cardName].o,
+          arturi: ACARDS[cardName].arturi
+        })
+      }
     }
   })
-  console.log("====")
-  console.log(`${cardName.toUpperCase()}`)
-  console.log('----')
-  console.log(`Total cards: ${synCards.length}`)
-  console.log('----')
-  //synCards.sort(bySynergyScore)
+  // synCards.sort(bySynergyScore)
   synCards.sort(byMV)
   synCards.forEach((c) => {
     if (! 'mv' in ACARDS[c.name]) {
       console.log(`Missing **mv** for ${c.name}!`)
-    }
-    //if (c.name in ACARDS && STANDARD_SETS.includes(ACARDS[c.name].s)) {
-    if (c.name in ACARDS) {
-      console.log(`${c.synergy}, ${c.name}, ${ACARDS[c.name].mv}, ${ACARDS[c.name].c.join('')}`)
     }
   })
   console.log('----')

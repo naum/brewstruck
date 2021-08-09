@@ -65,6 +65,7 @@ h2 {
 	font-size: 1.77rem;
 }
 
+
 section:after {
 	display: none;
   font-family: MagicCards;
@@ -108,6 +109,11 @@ tr:hover {
 	text-align: center;
 }
 
+#formatselect {
+	margin: 1.333rem auto;
+	text-align: center;
+}
+
 #hocard {
 	left: -3rem;
 	position: fixed;
@@ -124,5 +130,5 @@ tr:hover {
 }
 
 .litcolor {
-	color: var(--cemph);
+	color: var(--clink);
 }

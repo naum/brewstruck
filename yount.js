@@ -45,7 +45,7 @@ function generateImageFilename (u) {
   return fn
 }
 
-async function handleCard (cardName) {
+async function handleCard (cardName, format='historic') {
   const browser = await puppeteer.launch()
   const page = await browser.newPage()
   const targetUrl = `${EDHREC_URL}${formatCardQS(cardName)}`

@@ -9,8 +9,12 @@ a mtga (MTG Arena) deck generator
 ### prerequisites 
 
 - `nw.js`
-- puppeteer
-- cheerio
+- `puppeteer`
+- `cheerio`
+
+## run
+
+`npm run dev`
 
 ## todo
 
